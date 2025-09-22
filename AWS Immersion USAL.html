@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Fundamentals</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #232f3e;
+            color: #232f3e;
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-weight: 300;
+        }
+        
+        .aws-navbar {
+            background-color: #232f3e;
+            padding: 16px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .aws-navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .aws-logo {
+            color: #ff9900;
+            font-size: 24px;
+            font-weight: 700;
+            margin-right: 20px;
+        }
+        
+        .aws-navbar-title {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 400;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 80px auto 40px;
+            padding: 0 20px;
+        }
+        
+        .slide {
+            background-color: #ffffff;
+            padding: 48px;
+            margin-bottom: 24px;
+            min-height: calc(100vh - 120px);
+            display: none;
+            border-radius: 0;
+            box-shadow: 0 1px 1px 0 rgba(0,28,36,0.3), 0 1px 3px 1px rgba(0,28,36,0.15);
+        }
+        
+        .slide.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        h1 {
+            color: #232f3e;
+            font-size: 48px;
+            font-weight: 300;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #d5dbdb;
+            letter-spacing: -0.5px;
+        }
+        
+        h1.title-slide {
+            font-size: 64px;
+            border: none;
+            text-align: center;
+            margin-top: 120px;
+            font-weight: 200;
+        }
+        
+        h2 {
+            color: #232f3e;
+            font-size: 36px;
+            font-weight: 300;
+            margin: 32px 0 16px 0;
+            letter-spacing: -0.3px;
+        }
+        
+        h3 {
+            color: #232f3e;
+            font-size: 24px;
+            font-weight: 400;
+            margin: 24px 0 16px 0;
+        }
+        
+        p {
+            color: #545b64;
+            font-size: 16px;
+            line-height: 24px;
+            margin-bottom: 16px;
+            font-weight: 300;
+        }
+        
+        li {
+            color: #545b64;
+            font-size: 16px;
+            line-height: 28px;
+            margin-bottom: 8px;
+            font-weight: 300;
+        }
+        
+        ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+        
+        strong {
+            font-weight: 500;
+            color: #232f3e;
+        }
+        
+        .aws-orange {
+            color: #ff9900;
+            font-weight: 500;
+        }
+        
+        .aws-button {
+            background-color: #ff9900;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .aws-button:hover {
+            background-color: #ec7211;
+        }
+        
+        .aws-button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .aws-card {
+            background-color: #fafafa;
+            border: 1px solid #d5dbdb;
+            border-radius: 0;
+            padding: 24px;
+            margin: 16px 0;
+            transition: box-shadow 0.2s;
+        }
+        
+        .aws-card:hover {
+            box-shadow: 0 2px 4px 0 rgba(0,28,36,0.3);
+        }
+        
+        .aws-well {
+            background-color: #f2f3f3;
+            border-left: 4px solid #ff9900;
+            padding: 16px;
+            margin: 24px 0;
+        }
+        
+        .service-box {
+            background-color: #232f3e;
+            color: #ffffff;
+            padding: 24px;
+            margin: 16px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: #ff9900;
+        }
+        
+        .service-box h3 {
+            color: #ffffff;
+            margin-top: 0;
+        }
+        
+        .service-box p, .service-box li {
+            color: #ffffff;
+            opacity: 0.9;
+        }
+        
+        .aws-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        
+        .aws-grid-item {
+            background-color: #ffffff;
+            border: 1px solid #d5dbdb;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        
+        .aws-grid-item:hover {
+            border-color: #ff9900;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .aws-grid-item-dark {
+            background-color: #232f3e;
+            color: #ffffff;
+            border: 1px solid #232f3e;
+        }
+        
+        .aws-grid-item-dark:hover {
+            background-color: #1b2836;
+        }
+        
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 16px;
+            border-radius: 4px;
+            margin: 16px 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 20px;
+            overflow-x: auto;
+        }
+        
+        .aws-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 24px 0;
+            border: 1px solid #d5dbdb;
+        }
+        
+        .aws-table thead {
+            background-color: #f2f3f3;
+        }
+        
+        .aws-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 500;
+            color: #232f3e;
+            font-size: 14px;
+            border-bottom: 1px solid #d5dbdb;
+        }
+        
+        .aws-table td {
+            padding: 12px 16px;
+            color: #545b64;
+            font-size: 14px;
+            border-bottom: 1px solid #eaeded;
+        }
+        
+        .aws-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .aws-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            gap: 8px;
+            z-index: 1000;
+        }
+        
+        .slide-indicator {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #232f3e;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 2px;
+            font-size: 14px;
+            font-weight: 400;
+        }
+        
+        .aws-badge {
+            display: inline-block;
+            background-color: #232f3e;
+            color: #ffffff;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-right: 8px;
+        }
+        
+        .aws-badge-orange {
+            background-color: #ff9900;
+        }
+        
+        .aws-icon {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        
+        .region-map {
+            background: linear-gradient(135deg, #232f3e 0%, #37475a 100%);
+            padding: 32px;
+            margin: 24px 0;
+            position: relative;
+        }
+        
+        .az-container {
+            background-color: #37475a;
+            border: 2px solid #ff9900;
+            padding: 24px;
+            margin: 16px 0;
+        }
+        
+        .responsibility-shared {
+            background: linear-gradient(to bottom, #ff9900 0%, #ff9900 50%, #146eb4 50%, #146eb4 100%);
+            height: 4px;
+            width: 100%;
+            margin: 24px 0;
+        }
+        
+        .highlight-box {
+            background-color: #fef7e7;
+            border: 1px solid #ff9900;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .dim-text {
+            opacity: 0.7;
+        }
+        
+        .section-divider {
+            border-top: 1px solid #d5dbdb;
+            margin: 32px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="aws-navbar">
+        <div class="aws-navbar-content">
+            <div class="aws-logo">AWS</div>
+            <div class="aws-navbar-title">Training & Certification</div>
+        </div>
+    </div>
+    
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1 class="title-slide">Amazon Web Services</h1>
+            <p style="text-align: center; font-size: 28px; color: #545b64; margin-top: 24px; font-weight: 200;">
+                Fundamentos de Cloud Computing
+            </p>
+            <div style="text-align: center; margin-top: 80px;">
+                <div class="aws-grid" style="max-width: 600px; margin: 0 auto;">
+                    <div class="aws-grid-item">
+                        <h3 style="color: #ff9900; margin: 0;">Regiones y AZs</h3>
+                        <p class="dim-text">Infraestructura Global</p>
+                    </div>
+                    <div class="aws-grid-item">
+                        <h3 style="color: #ff9900; margin: 0;">Responsabilidad</h3>
+                        <p class="dim-text">Modelo Compartido</p>
+                    </div>
+                    <div class="aws-grid-item">
+                        <h3 style="color: #ff9900; margin: 0;">Cómputo</h3>
+                        <p class="dim-text">EC2, ECS, Lambda</p>
+                    </div>
+                    <div class="aws-grid-item">
+                        <h3 style="color: #ff9900; margin: 0;">Servicios</h3>
+                        <p class="dim-text">S3 & Bedrock</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Agenda -->
+        <div class="slide">
+            <h1>Agenda</h1>
+            
+            <div class="aws-card">
+                <span class="aws-badge">Módulo 1</span>
+                <h3>Infraestructura Global de AWS</h3>
+                <p>Comprenderemos cómo AWS organiza su infraestructura a nivel mundial con regiones y zonas de disponibilidad.</p>
+                <p class="dim-text">Duración: 20 minutos</p>
+            </div>
+            
+            <div class="aws-card">
+                <span class="aws-badge">Módulo 2</span>
+                <h3>Modelo de Responsabilidad Compartida</h3>
+                <p>Exploraremos las responsabilidades de AWS y del cliente según el tipo de servicio (IaaS, PaaS, SaaS).</p>
+                <p class="dim-text">Duración: 15 minutos</p>
+            </div>
+            
+            <div class="aws-card">
+                <span class="aws-badge">Módulo 3</span>
+                <h3>Servicios de Cómputo - Laboratorio</h3>
+                <p>Demostración práctica de EC2, ECS y Lambda ejecutando el mismo código Python.</p>
+                <p class="dim-text">Duración: 60 minutos</p>
+            </div>
+            
+            <div class="aws-card">
+                <span class="aws-badge">Módulo 4</span>
+                <h3>Almacenamiento y AI</h3>
+                <p>Introducción a Amazon S3 para almacenamiento y Amazon Bedrock para IA generativa.</p>
+                <p class="dim-text">Duración: 25 minutos</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: AWS Global Infrastructure -->
+        <div class="slide">
+            <h1>Infraestructura Global de AWS</h1>
+            
+            <div class="aws-well">
+                <strong>AWS opera en 33 regiones geográficas con 105 zonas de disponibilidad alrededor del mundo</strong>
+            </div>
+            
+            <h2>Regiones AWS</h2>
+            <p>Una región es una ubicación geográfica física donde agrupamos los centros de datos. Cada región de AWS está completamente aislada y consta de múltiples zonas de disponibilidad.</p>
+            
+            <div class="region-map">
+                <h3 style="color: white; margin-top: 0;">Ejemplos de Regiones</h3>
+                <div class="aws-grid">
+                    <div class="aws-grid-item-dark">
+                        <span class="aws-badge-orange">US-EAST-1</span>
+                        <p><strong>Norte de Virginia</strong></p>
+                        <p class="dim-text">Primera región de AWS</p>
+                    </div>
+                    <div class="aws-grid-item-dark">
+                        <span class="aws-badge-orange">SA-EAST-1</span>
+                        <p><strong>São Paulo</strong></p>
+                        <p class="dim-text">Región Sudamérica</p>
+                    </div>
+                    <div class="aws-grid-item-dark">
+                        <span class="aws-badge-orange">EU-WEST-1</span>
+                        <p><strong>Irlanda</strong></p>
+                        <p class="dim-text">Región Europa</p>
+                    </div>
+                    <div class="aws-grid-item-dark">
+                        <span class="aws-badge-orange">AP-SOUTHEAST-1</span>
+                        <p><strong>Singapur</strong></p>
+                        <p class="dim-text">Región Asia Pacífico</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Consideraciones al elegir una región</h3>
+            <ul>
+                <li><strong>Cumplimiento y soberanía de datos:</strong> Requisitos legales y regulatorios</li>
+                <li><strong>Proximidad a los usuarios:</strong> Reducir latencia</li>
+                <li><strong>Disponibilidad de servicios:</strong> No todos los servicios están en todas las regiones</li>
+                <li><strong>Precios:</strong> Los costos varían entre regiones</li>
+            </ul>
+        </div>
+
+        <!-- Slide 4: Availability Zones -->
+        <div class="slide">
+            <h1>Zonas de Disponibilidad</h1>
+            
+            <p>Las zonas de disponibilidad (AZ) son centros de datos aislados dentro de una región de AWS.</p>
+            
+            <div class="az-container">
+                <h3 style="color: white; margin-top: 0;">Región: sa-east-1 (São Paulo)</h3>
+                <div class="aws-grid">
+                    <div class="aws-card">
+                        <h3 style="color: #ff9900;">AZ: sa-east-1a</h3>
+                        <ul style="list-style-type: none; margin-left: 0;">
+                            <li>✓ Energía redundante</li>
+                            <li>✓ Redes independientes</li>
+                            <li>✓ Sistemas de refrigeración</li>
+                            <li>✓ Seguridad física</li>
+                        </ul>
+                    </div>
+                    <div class="aws-card">
+                        <h3 style="color: #ff9900;">AZ: sa-east-1b</h3>
+                        <ul style="list-style-type: none; margin-left: 0;">
+                            <li>✓ Energía redundante</li>
+                            <li>✓ Redes independientes</li>
+                            <li>✓ Sistemas de refrigeración</li>
+                            <li>✓ Seguridad física</li>
+                        </ul>
+                    </div>
+                    <div class="aws-card">
+                        <h3 style="color: #ff9900;">AZ: sa-east-1c</h3>
+                        <ul style="list-style-type: none; margin-left: 0;">
+                            <li>✓ Energía redundante</li>
+                            <li>✓ Redes independientes</li>
+                            <li>✓ Sistemas de refrigeración</li>
+                            <li>✓ Seguridad física</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Características clave</h3>
+            <div class="aws-grid">
+                <div class="aws-card">
+                    <h3 style="color: #232f3e; font-size: 18px;">Alta disponibilidad</h3>
+                    <p>Diseñe aplicaciones que se ejecuten en múltiples AZ para lograr tolerancia a fallas.</p>
+                </div>
+                <div class="aws-card">
+                    <h3 style="color: #232f3e; font-size: 18px;">Baja latencia</h3>
+                    <p>Las AZ están conectadas con redes privadas de alto ancho de banda.</p>
+                </div>
+                <div class="aws-card">
+                    <h3 style="color: #232f3e; font-size: 18px;">Aislamiento de fallas</h3>
+                    <p>Los problemas en una AZ no afectan a las demás.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Shared Responsibility Model -->
+        <div class="slide">
+            <h1>Modelo de Responsabilidad Compartida</h1>
+            
+            <div class="responsibility-shared"></div>
+            
+            <div class="aws-grid">
+                <div class="service-box">
+                    <h3>AWS - Seguridad DE la nube</h3>
+                    <ul>
+                        <li>Infraestructura física</li>
+                        <li>Red global</li>
+                        <li>Hipervisor</li>
+                        <li>Centros de datos</li>
+                        <li>Hardware</li>
+                    </ul>
+                </div>
+                <div class="service-box" style="background-color: #146eb4;">
+                    <h3>Cliente - Seguridad EN la nube</h3>
+                    <ul>
+                        <li>Datos del cliente</li>
+                        <li>Aplicaciones</li>
+                        <li>Gestión de identidades</li>
+                        <li>Sistema operativo</li>
+                        <li>Configuración de red</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>Principio clave:</strong> AWS gestiona la seguridad de la infraestructura subyacente, mientras que usted es responsable de todo lo que coloque en AWS.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Service Models -->
+        <div class="slide">
+            <h1>Modelos de Servicio Cloud</h1>
+            
+            <table class="aws-table">
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>On-Premises</th>
+                        <th>IaaS (EC2)</th>
+                        <th>PaaS (Elastic Beanstalk)</th>
+                        <th>SaaS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Aplicaciones</strong></td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Datos</strong></td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Runtime</strong></td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Middleware</strong></td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sistema Operativo</strong></td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Virtualización</strong></td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Servidores</strong></td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Almacenamiento</strong></td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Redes</strong></td>
+                        <td style="background-color: #fef7e7;">Cliente</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                        <td style="background-color: #e6f2ff;">AWS</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 7: Compute Services Overview -->
+        <div class="slide">
+            <h1>Servicios de Cómputo de AWS</h1>
+            
+            <div class="service-box">
+                <span class="aws-badge-orange">EC2</span>
+                <h3>Amazon Elastic Compute Cloud</h3>
+                <p>Capacidad de cómputo redimensionable en la nube.</p>
+                <ul>
+                    <li>Máquinas virtuales (instancias)</li>
+                    <li>Control completo del sistema operativo</li>
+                    <li>Múltiples tipos de instancia optimizados</li>
+                    <li>Pago por segundo u hora de uso</li>
+                </ul>
+            </div>
+            
+            <div class="service-box" style="background-color: #146eb4;">
+                <span class="aws-badge-orange">ECS</span>
+                <h3>Amazon Elastic Container Service</h3>
+                <p>Servicio de orquestación de contenedores altamente escalable.</p>
+                <ul>
+                    <li>Ejecuta aplicaciones en contenedores Docker</li>
+                    <li>Integración con AWS Fargate para serverless</li>
+                    <li>Service discovery y load balancing integrados</li>
+                    <li>Compatible con Amazon ECR</li>
+                </ul>
+            </div>
+            
+            <div class="service-box" style="background-color: #ff9900;">
+                <span class="aws-badge">SERVERLESS</span>
+                <h3>AWS Lambda</h3>
+                <p>Ejecute código sin pensar en servidores.</p>
+                <ul>
+                    <li>Ejecuta código en respuesta a eventos</li>
+                    <li>Escala automáticamente</li>
+                    <li>Pago por milisegundo de ejecución</li>
+                    <li>Soporta múltiples lenguajes de programación</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Compute Comparison -->
+        <div class="slide">
+            <h1>Comparación de Servicios de Cómputo</h1>
+            
+            <table class="aws-table">
+                <thead>
+                    <tr>
+                        <th>Característica</th>
+                        <th>Amazon EC2</th>
+                        <th>Amazon ECS</th>
+                        <th>AWS Lambda</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Modelo</strong></td>
+                        <td>Máquinas virtuales</td>
+                        <td>Contenedores</td>
+                        <td>Funciones</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tiempo de inicio</strong></td>
+                        <td>Minutos</td>
+                        <td>Segundos</td>
+                        <td>Milisegundos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Escalabilidad</strong></td>
+                        <td>Manual/Auto Scaling</td>
+                        <td>Automática</td>
+                        <td>Instantánea</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Precio</strong></td>
+                        <td>Por hora/segundo</td>
+                        <td>Por recurso utilizado</td>
+                        <td>Por invocación y duración</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gestión</strong></td>
+                        <td>Usuario gestiona OS</td>
+                        <td>AWS gestiona contenedores</td>
+                        <td>Sin servidor</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Casos de uso</strong></td>
+                        <td>Aplicaciones tradicionales</td>
+                        <td>Microservicios</td>
+                        <td>Event-driven, APIs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tiempo máximo</strong></td>
+                        <td>Sin límite</td>
+                        <td>Sin límite</td>
+                        <td>15 minutos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Persistencia</strong></td>
+                        <td>Con EBS volumes</td>
+                        <td>Con EFS/EBS</td>
+                        <td>Sin estado</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="aws-well">
+                <strong>Recomendación:</strong> Elija EC2 para control total, ECS para aplicaciones containerizadas, y Lambda para cargas de trabajo event-driven y de corta duración.
+            </div>
+        </div>
+
+        <!-- Slide 9: Demo Code -->
+        <div class="slide">
+            <h1>Código de Demostración</h1>
+            <p>Ejecutaremos este código Python en los tres servicios de cómputo:</p>
+            
+            <div class="code-block">
+<pre><code>#!/usr/bin/env python3
+import json
+import platform
+import socket
+from datetime import datetime
+
+def process_data(event=None):
+    """
+    Función que procesa datos y retorna información del sistema
+    Compatible con EC2, ECS y Lambda
+    """
+    
+    # Obtener información del sistema
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Construir respuesta
+    data = {
+        "timestamp": current_time,
+        "service": "AWS Compute Demo",
+        "hostname": socket.gethostname(),
+        "platform": platform.platform(),
+        "python_version": platform.python_version(),
+        "status": "success",
+        "message": "¡Hola desde AWS!"
+    }
+    
+    # Si hay evento (Lambda), incluirlo
+    if event:
+        data["event_received"] = event
+    
+    return {
+        "statusCode": 200,
+        "body": json.dumps(data, indent=2)
+    }
+
+# Entry point para EC2/ECS
+if __name__ == "__main__":
+    result = process_data()
+    print(result['body'])
+
+# Handler para Lambda
+def lambda_handler(event, context):
+    return process_data(event)</code></pre>
+            </div>
+            
+            <div class="aws-grid">
+                <div class="aws-card">
+                    <h3>EC2</h3>
+                    <p>Script Python tradicional</p>
+                </div>
+                <div class="aws-card">
+                    <h3>ECS</h3>
+                    <p>Dentro de container Docker</p>
+                </div>
+                <div class="aws-card">
+                    <h3>Lambda</h3>
+                    <p>Como función handler</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: S3 Overview -->
+        <div class="slide">
+            <h1>Amazon Simple Storage Service (S3)</h1>
+            
+            <div class="aws-well">
+                <strong>Amazon S3</strong> es almacenamiento de objetos creado para almacenar y recuperar cualquier cantidad de datos desde cualquier lugar.
+            </div>
+            
+            <div class="aws-grid">
+                <div class="aws-card">
+                    <h3 style="color: #ff9900;">99.999999999%</h3>
+                    <p><strong>Durabilidad</strong></p>
+                    <p class="dim-text">11 nueves de durabilidad</p>
+                </div>
+                <div class="aws-card">
+                    <h3 style="color: #ff9900;">99.99%</h3>
+                    <p><strong>Disponibilidad</strong></p>
+                    <p class="dim-text">SLA de disponibilidad</p>
+                </div>
+                <div class="aws-card">
+                    <h3 style="color: #ff9900;">Ilimitado</h3>
+                    <p><strong>Almacenamiento</strong></p>
+                    <p class="dim-text">Sin límites de capacidad</p>
+                </div>
+                <div class="aws-card">
+                    <h3 style="color: #ff9900;">5 TB</h3>
+                    <p><strong>Tamaño máximo</strong></p>
+                    <p class="dim-text">Por objeto individual</p>
+                </div>
+            </div>
+            
+            <h3>Conceptos clave de S3</h3>
+            <table class="aws-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Bucket</strong></td>
+                        <td>Contenedor para objetos</td>
+                        <td>my-company-data</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Object</strong></td>
+                        <td>Archivo y metadata</td>
+                        <td>documents/report.pdf</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Key</strong></td>
+                        <td>Identificador único del objeto</td>
+                        <td>2024/logs/app.log</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Region</strong></td>
+                        <td>Ubicación geográfica del bucket</td>
+                        <td>sa-east-1</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Casos de uso comunes</h3>
+            <div class="aws-grid">
+                <div class="service-box">
+                    <h3>Backup y archivo</h3>
+                </div>
+                <div class="service-box" style="background-color: #146eb4;">
+                    <h3>Hosting de sitios web</h3>
+                </div>
+                <div class="service-box" style="background-color: #ff9900;">
+                    <h3>Data Lakes</h3>
+                </div>
+                <div class="service-box">
+                    <h3>Distribución de contenido</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Amazon Bedrock -->
+        <div class="slide">
+            <h1>Amazon Bedrock</h1>
+            
+            <div class="aws-well">
+                <strong>Amazon Bedrock</strong> es un servicio completamente administrado que ofrece modelos fundacionales de IA de las principales startups de IA a través de una API.
+            </div>
+            
+            <h3>Modelos disponibles</h3>
+            <div class="aws-grid">
+                <div class="aws-card">
+                    <span class="aws-badge-orange">ANTHROPIC</span>
+                    <h3>Claude</h3>
+                    <p>Modelos de lenguaje avanzados para análisis y generación</p>
+                </div>
+                <div class="aws-card">
+                    <span class="aws-badge-orange">AI21 LABS</span>
+                    <h3>Jurassic</h3>
+                    <p>Modelos especializados en comprensión de texto</p>
+                </div>
+                <div class="aws-card">
+                    <span class="aws-badge-orange">STABILITY AI</span>
+                    <h3>Stable Diffusion</h3>
+                    <p>Generación de imágenes de alta calidad</p>
+                </div>
+                <div class="aws-card">
+                    <span class="aws-badge-orange">AMAZON</span>
+                    <h3>Titan</h3>
+                    <p>Modelos de Amazon para texto y embeddings</p>
+                </div>
+            </div>
+            
+            <h3>Ejemplo de uso con Python</h3>
+            <div class="code-block">
+<pre><code>import boto3
+import json
+
+# Cliente de Bedrock
+bedrock = boto3.client(
+    service_name='bedrock-runtime',
+    region_name='us-east-1'
+)
+
+# Preparar prompt
+prompt = "Explica los beneficios de usar AWS para machine learning"
+
+# Invocar modelo
+response = bedrock.invoke_model(
+    modelId='anthropic.claude-v2',
+    contentType='application/json',
+    accept='application/json',
+    body=json.dumps({
+        "prompt": f"\n\nHuman: {prompt}\n\nAssistant:",
+        "max_tokens_to_sample": 300,
+        "temperature": 0.7,
+        "top_p": 1,
+    })
+)
+
+# Procesar respuesta
+result = json.loads(response['body'].read())
+print(result['completion'])</code></pre>
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>Ventajas clave:</strong> Sin infraestructura que administrar, pago por uso, modelos de última generación, integración con servicios AWS.</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Summary -->
+        <div class="slide">
+            <h1>Resumen</h1>
+            
+            <div class="aws-card">
+                <span class="aws-badge">INFRAESTRUCTURA</span>
+                <h3>Regiones y Zonas de Disponibilidad</h3>
+                <ul>
+                    <li>33 regiones con 105 AZs globalmente</li>
+                    <li>Diseñe para alta disponibilidad usando múltiples AZs</li>
+                    <li>Considere latencia y cumplimiento al elegir región</li>
+                </ul>
+            </div>
+            
+            <div class="aws-card">
+                <span class="aws-badge">SEGURIDAD</span>
+                <h3>Modelo de Responsabilidad Compartida</h3>
+                <ul>
+                    <li>AWS asegura la infraestructura</li>
+                    <li>Cliente asegura sus datos y aplicaciones</li>
+                    <li>La responsabilidad varía según el servicio (IaaS/PaaS/SaaS)</li>
+                </ul>
+            </div>
+            
+            <div class="aws-card">
+                <span class="aws-badge">CÓMPUTO</span>
+                <h3>Opciones de Procesamiento</h3>
+                <ul>
+                    <li><strong>EC2:</strong> Máquinas virtuales con control total</li>
+                    <li><strong>ECS:</strong> Orquestación de contenedores</li>
+                    <li><strong>Lambda:</strong> Funciones serverless</li>
+                </ul>
+            </div>
+            
+            <div class="aws-card">
+                <span class="aws-badge">SERVICIOS</span>
+                <h3>Almacenamiento e IA</h3>
+                <ul>
+                    <li><strong>S3:</strong> Almacenamiento de objetos escalable</li>
+                    <li><strong>Bedrock:</strong> IA generativa administrada</li>
+                </ul>
+            </div>
+            
+            <div class="section-divider"></div>
+            
+            <h2>Próximos pasos</h2>
+            <div class="aws-grid">
+                <div class="aws-grid-item">
+                    <strong>1. Cuenta AWS</strong>
+                    <p class="dim-text">Crear cuenta Free Tier</p>
+                </div>
+                <div class="aws-grid-item">
+                    <strong>2. Hands-on</strong>
+                    <p class="dim-text">Practicar con los servicios</p>
+                </div>
+                <div class="aws-grid-item">
+                    <strong>3. Certificación</strong>
+                    <p class="dim-text">AWS Cloud Practitioner</p>
+                </div>
+                <div class="aws-grid-item">
+                    <strong>4. Documentación</strong>
+                    <p class="dim-text">docs.aws.amazon.com</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 48px;">
+                <h2>¿Preguntas?</h2>
+                <p style="font-size: 20px; color: #545b64;">Tiempo para Q&A</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="navigation">
+        <button class="aws-button" onclick="changeSlide(-1)" id="prevBtn">← ANTERIOR</button>
+        <button class="aws-button" onclick="changeSlide(1)" id="nextBtn">SIGUIENTE →</button>
+    </div>
+    
+    <div class="slide-indicator" id="slideIndicator">
+        Slide <span id="currentSlideNum">1</span> de 12
+    </div>
+    
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 12;
+        
+        function showSlide(n) {
+            const slides = document.getElementsByClassName('slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideNum = document.getElementById('currentSlideNum');
+            
+            if (n > totalSlides) currentSlide = totalSlides;
+            if (n < 1) currentSlide = 1;
+            
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove('active');
+            }
+            
+            slides[currentSlide - 1].classList.add('active');
+            
+            // Update navigation
+            prevBtn.disabled = currentSlide === 1;
+            nextBtn.disabled = currentSlide === totalSlides;
+            
+            // Update slide number
+            slideNum.textContent = currentSlide;
+        }
+        
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') changeSlide(-1);
+            if (event.key === 'ArrowRight') changeSlide(1);
+            if (event.key === 'Home') { currentSlide = 1; showSlide(1); }
+            if (event.key === 'End') { currentSlide = totalSlides; showSlide(totalSlides); }
+        });
+        
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', function(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        });
+        
+        document.addEventListener('touchend', function(event) {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) changeSlide(1);  // Swipe left
+            if (touchEndX > touchStartX + 50) changeSlide(-1); // Swipe right
+        }
+        
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
